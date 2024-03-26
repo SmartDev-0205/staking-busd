@@ -212,7 +212,7 @@ library SafeMath {
 	}
 }
 
-contract ERC20 is Context,Ownable{
+contract StandardERC20 is Context,Ownable{
 
 	event Transfer(address indexed from, address indexed to, uint256 value);
 
