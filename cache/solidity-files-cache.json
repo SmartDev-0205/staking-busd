@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\working\\2024-03-26 Token  Staking\\staking-busd\\contracts\\ERC20.sol": {
-      "lastModificationDate": 1711459437984,
-      "contentHash": "6aa60abee58bfa015f8011b24f33a747",
+      "lastModificationDate": 1711558926452,
+      "contentHash": "af00f928fdc03e6b6f2d68a1e300bf7e",
       "sourceName": "contracts/ERC20.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -41,14 +41,14 @@
       ],
       "artifacts": [
         "Context",
+        "ERC20",
         "Ownable",
-        "SafeMath",
-        "StandardERC20"
+        "SafeMath"
       ]
     },
     "D:\\working\\2024-03-26 Token  Staking\\staking-busd\\contracts\\staking.sol": {
-      "lastModificationDate": 1711463156081,
-      "contentHash": "9f06a40865e62f745d4c88a5c5b1c82f",
+      "lastModificationDate": 1711558916756,
+      "contentHash": "4dcc4b7b8f42f26b32d691b13706433e",
       "sourceName": "contracts/staking.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -90,13 +90,11 @@
         "^0.8.0",
         "^0.8.0",
         "^0.8.0",
-        "^0.8.0",
         "^0.8.0"
       ],
       "artifacts": [
         "Address",
         "Context",
-        "ERC20",
         "IERC20",
         "IERC20Metadata",
         "IERC20Permit",

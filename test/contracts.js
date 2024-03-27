@@ -33,57 +33,55 @@ describe("deploy contracts", function () {
     await tokenContract.deployed();
     console.log("token address", tokenContract.address);
 
-    // const Staking = await ethers.getContractFactory("Staking");
-    // stakingContract = await Staking.deploy();
-    // await tokenContract.deployed();
+    const Staking = await ethers.getContractFactory("Staking");
+    stakingContract = await Staking.deploy();
+    await tokenContract.deployed();
+    var tx = await tokenContract.transfer(addr1.address, toBigNum("100", 18));
+    await tx.wait();
 
 
-    // var balance = await tokenContract.balanceOf(owner.address);
-    var totalSupply = await tokenContract.totalSupply();
-    console.log("balance=========>", totalSupply);
-
-    // var tx = await tokenContract.transfer(addr1.address, toBigNum("100", 18));
-    // await tx.wait();
-
-
-    // var tx = await tokenContract.transfer(addr2.address, toBigNum("100", 18));
-    // await tx.wait();
+    var tx = await tokenContract.transfer(addr2.address, toBigNum("100", 18));
+    await tx.wait();
   });
 
-  // it("Contract initialize", async function () {
-  //   var tx = await stakingContract.add(tokenContract.address, tokenContract.address, 50, 15);
-  //   await tx.wait();
+  it("Contract initialize", async function () {
+    var tx = await stakingContract.add(tokenContract.address, tokenContract.address, 50, 15);
+    await tx.wait();
 
-  //   var tx = await stakingContract.add(tokenContract.address, tokenContract.address, 75, 30);
-  //   await tx.wait();
+    var tx = await stakingContract.add(tokenContract.address, tokenContract.address, 75, 30);
+    await tx.wait();
 
-  //   var tx = await stakingContract.add(tokenContract.address, tokenContract.address, 100, 60);
-  //   await tx.wait();
+    var tx = await stakingContract.add(tokenContract.address, tokenContract.address, 100, 60);
+    await tx.wait();
 
-  //   var tx = await tokenContract.approve(stakingContract.address, toBigNum("100", 18));
-  //   await tx.wait();
+    var tx = await tokenContract.approve(stakingContract.address, toBigNum("100", 18));
+    await tx.wait();
 
-  //   var tx = await stakingContract.depositForReward(toBigNum("100", 18));
-  //   await tx.wait();
-  // });
+    var tx = await stakingContract.depositForReward(toBigNum("100", 18));
+    await tx.wait();
+  });
 
 });
 
 describe("Contract Test", function () {
-  // it("Deposit first plan", async function () {
-  //   var tx = await tokenContract.approve(stakingContract.address, toBigNum("10", 18));
-  //   await tx.wait();
-  //   var tx = await stakingContract.deposit(0, toBigNum("10", 18));
-  //   await tx.wait();
-  // });
+  it("Deposit first plan", async function () {
+    var tx = await tokenContract.approve(stakingContract.address, toBigNum("10", 18));
+    await tx.wait();
+    var tx = await stakingContract.deposit(0, toBigNum("10", 18));
+    await tx.wait();
+  });
 
-  // it("Deposit first plan", async function () {
-  //   var tx = await stakingContract.deposit(1, toBigNum(10, 18));
-  //   await tx.wait();
-  // });
+  it("Deposit second plan", async function () {
+    var tx = await tokenContract.approve(stakingContract.address, toBigNum("10", 18));
+    await tx.wait();
+    var tx = await stakingContract.deposit(1, toBigNum("10", 18));
+    await tx.wait();
+  });
 
-  // it("Deposit first plan", async function () {
-  //   var tx = await stakingContract.deposit(2, toBigNum(10, 18));
-  //   await tx.wait();
-  // });
+  it("Deposit third plan", async function () {
+    var tx = await tokenContract.approve(stakingContract.address, toBigNum("10", 18));
+    await tx.wait();
+    var tx = await stakingContract.deposit(2, toBigNum("10", 18));
+    await tx.wait();
+  });
 });

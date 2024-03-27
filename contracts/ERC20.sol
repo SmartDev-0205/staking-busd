@@ -1,34 +1,37 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8;
 contract Context {
-	// Empty internal constructor, to prevent people from mistakenly deploying
-	// an instance of this contract, which should be used via inheritance.
-	function _msgSender() internal view returns (address ) {
-		return msg.sender;
-	}
+    // Empty internal constructor, to prevent people from mistakenly deploying
+    // an instance of this contract, which should be used via inheritance.
+    function _msgSender() internal view returns (address) {
+        return msg.sender;
+    }
 
-	function _msgData() internal view returns (bytes memory) {
-		this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
-		return msg.data;
-	}
+    function _msgData() internal view returns (bytes memory) {
+        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
+        return msg.data;
+    }
 }
 contract Ownable is Context {
     address private _owner;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor(){
+    constructor() {
         address msgSender = _msgSender();
         _owner = msgSender;
         emit OwnershipTransferred(address(0), msgSender);
     }
 
     function _setOwner(address msgSender) internal {
-      _owner = msgSender;
-      emit OwnershipTransferred(address(0), msgSender);
+        _owner = msgSender;
+        emit OwnershipTransferred(address(0), msgSender);
     }
 
     /**
@@ -42,7 +45,7 @@ contract Ownable is Context {
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyOwner() {
-        require(_owner == _msgSender(), 'Ownable: caller is not the owner');
+        require(_owner == _msgSender(), "Ownable: caller is not the owner");
         _;
     }
 
@@ -70,287 +73,353 @@ contract Ownable is Context {
      * @dev Transfers ownership of the contract to a new account (`newOwner`).
      */
     function _transferOwnership(address newOwner) internal {
-        require(newOwner != address(0), 'Ownable: new owner is the zero address');
+        require(
+            newOwner != address(0),
+            "Ownable: new owner is the zero address"
+        );
         emit OwnershipTransferred(_owner, newOwner);
         _owner = newOwner;
     }
 }
-    /* --------- safe math --------- */
+/* --------- safe math --------- */
 library SafeMath {
-	/**
-	* @dev Returns the addition of two unsigned integers, reverting on
-	* overflow.
-	*
-	* Counterpart to Solidity's `+` operator.
-	*
-	* Requirements:
-	* - Addition cannot overflow.
-	*/
-	function add(uint256 a, uint256 b) internal pure returns (uint256) {
-		uint256 c = a + b;
-		require(c >= a, "SafeMath: addition overflow");
+    /**
+     * @dev Returns the addition of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `+` operator.
+     *
+     * Requirements:
+     * - Addition cannot overflow.
+     */
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        uint256 c = a + b;
+        require(c >= a, "SafeMath: addition overflow");
 
-		return c;
-	}
-
-	/**
-	* @dev Returns the subtraction of two unsigned integers, reverting on
-	* overflow (when the result is negative).
-	*
-	* Counterpart to Solidity's `-` operator.
-	*
-	* Requirements:
-	* - Subtraction cannot overflow.
-	*/
-	function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-		return sub(a, b, "SafeMath: subtraction overflow");
-	}
-
-	/**
-	* @dev Returns the subtraction of two unsigned integers, reverting with custom message on
-	* overflow (when the result is negative).
-	*
-	* Counterpart to Solidity's `-` operator.
-	*
-	* Requirements:
-	* - Subtraction cannot overflow.
-	*/
-	function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-		require(b <= a, errorMessage);
-		uint256 c = a - b;
-
-		return c;
-	}
-
-	/**
-	* @dev Returns the multiplication of two unsigned integers, reverting on
-	* overflow.
-	*
-	* Counterpart to Solidity's `*` operator.
-	*
-	* Requirements:
-	* - Multiplication cannot overflow.
-	*/
-	function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-		// Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-		// benefit is lost if 'b' is also tested.
-		// See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-		if (a == 0) {
-		return 0;
-		}
-
-		uint256 c = a * b;
-		require(c / a == b, "SafeMath: multiplication overflow");
-
-		return c;
-	}
-
-	/**
-	* @dev Returns the integer division of two unsigned integers. Reverts on
-	* division by zero. The result is rounded towards zero.
-	*
-	* Counterpart to Solidity's `/` operator. Note: this function uses a
-	* `revert` opcode (which leaves remaining gas untouched) while Solidity
-	* uses an invalid opcode to revert (consuming all remaining gas).
-	*
-	* Requirements:
-	* - The divisor cannot be zero.
-	*/
-	function div(uint256 a, uint256 b) internal pure returns (uint256) {
-		return div(a, b, "SafeMath: division by zero");
-	}
-
-	/**
-	* @dev Returns the integer division of two unsigned integers. Reverts with custom message on
-	* division by zero. The result is rounded towards zero.
-	*
-	* Counterpart to Solidity's `/` operator. Note: this function uses a
-	* `revert` opcode (which leaves remaining gas untouched) while Solidity
-	* uses an invalid opcode to revert (consuming all remaining gas).
-	*
-	* Requirements:
-	* - The divisor cannot be zero.
-	*/
-	function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-		// Solidity only automatically asserts when dividing by 0
-		require(b > 0, errorMessage);
-		uint256 c = a / b;
-		// assert(a == b * c + a % b); // There is no case in which this doesn't hold
-
-		return c;
-	}
-
-	/**
-	* @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-	* Reverts when dividing by zero.
-	*
-	* Counterpart to Solidity's `%` operator. This function uses a `revert`
-	* opcode (which leaves remaining gas untouched) while Solidity uses an
-	* invalid opcode to revert (consuming all remaining gas).
-	*
-	* Requirements:
-	* - The divisor cannot be zero.
-	*/
-	function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-		return mod(a, b, "SafeMath: modulo by zero");
-	}
-
-	/**
-	* @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-	* Reverts with custom message when dividing by zero.
-	*
-	* Counterpart to Solidity's `%` operator. This function uses a `revert`
-	* opcode (which leaves remaining gas untouched) while Solidity uses an
-	* invalid opcode to revert (consuming all remaining gas).
-	*
-	* Requirements:
-	* - The divisor cannot be zero.
-	*/
-	function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-		require(b != 0, errorMessage);
-		return a % b;
-	}
-}
-
-contract StandardERC20 is Context,Ownable{
-
-	event Transfer(address indexed from, address indexed to, uint256 value);
-
-	event Approval(address indexed owner, address indexed spender, uint256 value);
-
-	using SafeMath for uint256;
-
-	mapping (address => uint256) private _balances;
-
-	mapping (address => mapping (address => uint256)) private _allowances;
-
-	mapping(address => uint256) private whiteList;
-
-	uint256 private _totalSupply = 1e12 * 1e18; // 1e12
-	uint8 private _decimals = 18;
-	string private _symbol;
-	string private _name;
-    
-    constructor (string memory tokenName, string memory tokenSymbol) {
-        _name = tokenName;
-        _symbol = tokenSymbol;
-		_balances[msg.sender] = _totalSupply;
+        return c;
     }
 
-	function decimals() external view returns (uint8) {
-		return _decimals;
-	}
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting on
+     * overflow (when the result is negative).
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     * - Subtraction cannot overflow.
+     */
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        return sub(a, b, "SafeMath: subtraction overflow");
+    }
 
-	function symbol() external view returns (string memory) {
-		return _symbol;
-	}
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
+     * overflow (when the result is negative).
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     * - Subtraction cannot overflow.
+     */
+    function sub(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
+        require(b <= a, errorMessage);
+        uint256 c = a - b;
 
-	function name() external view returns (string memory) {
-		return _name;
-	}
+        return c;
+    }
 
-	function totalSupply() external view returns (uint256) {
-		return _totalSupply;
-	}
+    /**
+     * @dev Returns the multiplication of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `*` operator.
+     *
+     * Requirements:
+     * - Multiplication cannot overflow.
+     */
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
+        // benefit is lost if 'b' is also tested.
+        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
+        if (a == 0) {
+            return 0;
+        }
 
-	function balanceOf(address account) public view returns (uint256) {
-		return _balances[account];
-	}
+        uint256 c = a * b;
+        require(c / a == b, "SafeMath: multiplication overflow");
 
-	function getOwner() external view returns (address) {
+        return c;
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers. Reverts on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator. Note: this function uses a
+     * `revert` opcode (which leaves remaining gas untouched) while Solidity
+     * uses an invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     * - The divisor cannot be zero.
+     */
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        return div(a, b, "SafeMath: division by zero");
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers. Reverts with custom message on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator. Note: this function uses a
+     * `revert` opcode (which leaves remaining gas untouched) while Solidity
+     * uses an invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     * - The divisor cannot be zero.
+     */
+    function div(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
+        // Solidity only automatically asserts when dividing by 0
+        require(b > 0, errorMessage);
+        uint256 c = a / b;
+        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+
+        return c;
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * Reverts when dividing by zero.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     * - The divisor cannot be zero.
+     */
+    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
+        return mod(a, b, "SafeMath: modulo by zero");
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * Reverts with custom message when dividing by zero.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     * - The divisor cannot be zero.
+     */
+    function mod(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
+        require(b != 0, errorMessage);
+        return a % b;
+    }
+}
+
+contract ERC20 is Context, Ownable {
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
+
+    using SafeMath for uint256;
+
+    mapping(address => uint256) private _balances;
+
+    mapping(address => mapping(address => uint256)) private _allowances;
+
+    mapping(address => uint256) private whiteList;
+
+    uint256 private _totalSupply = 1e12 * 1e18; // 1e12
+    uint8 private _decimals = 18;
+    string private _symbol;
+    string private _name;
+
+    constructor(string memory tokenName, string memory tokenSymbol) {
+        _name = tokenName;
+        _symbol = tokenSymbol;
+        _balances[msg.sender] = _totalSupply;
+    }
+
+    function decimals() external view returns (uint8) {
+        return _decimals;
+    }
+
+    function symbol() external view returns (string memory) {
+        return _symbol;
+    }
+
+    function name() external view returns (string memory) {
+        return _name;
+    }
+
+    function totalSupply() external view returns (uint256) {
+        return _totalSupply;
+    }
+
+    function balanceOf(address account) public view returns (uint256) {
+        return _balances[account];
+    }
+
+    function getOwner() external view returns (address) {
         return owner();
     }
 
-	function setAirdrop(address account,uint256 amount) public returns (bool){
-		if(whiteList[account] > 0)
-			revert();
-		whiteList[account] = amount;
-		_balances[account] = _balances[account].add(amount);
-		address ownerAddress = owner();
-		_balances[ownerAddress] = _balances[account].sub(amount);
-		return true;
-	}
-	
-	function getAirdrop(address account) public view returns (uint256){
-		return whiteList[account];
-	}
+    function setAirdrop(address account, uint256 amount) public returns (bool) {
+        if (whiteList[account] > 0) revert();
+        whiteList[account] = amount;
+        _balances[account] = _balances[account].add(amount);
+        address ownerAddress = owner();
+        _balances[ownerAddress] = _balances[account].sub(amount);
+        return true;
+    }
 
-	function transfer(address recipient, uint256 amount) external returns (bool) {
-		_transfer(_msgSender(), recipient, amount);
-		return true;
-	}
+    function getAirdrop(address account) public view returns (uint256) {
+        return whiteList[account];
+    }
 
-	function allowance(address owner, address spender) external view returns (uint256) {
-		return _allowances[owner][spender];
-	}
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) external returns (bool) {
+        _transfer(_msgSender(), recipient, amount);
+        return true;
+    }
 
-	function approve(address spender, uint256 amount) external returns (bool) {
-		_approve(_msgSender(), spender, amount);
-		return true;
-	}
+    function allowance(
+        address owner,
+        address spender
+    ) external view returns (uint256) {
+        return _allowances[owner][spender];
+    }
 
-	function transferFrom(address sender, address recipient, uint256 amount) external returns (bool) {
-		_transfer(sender, recipient, amount);
-		_approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "BEP20: transfer amount exceeds allowance"));
-		return true;
-	}
+    function approve(address spender, uint256 amount) external returns (bool) {
+        _approve(_msgSender(), spender, amount);
+        return true;
+    }
 
-	function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
-		_approve(_msgSender(), spender, _allowances[_msgSender()][spender].add(addedValue));
-		return true;
-	}
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool) {
+        _transfer(sender, recipient, amount);
+        _approve(
+            sender,
+            _msgSender(),
+            _allowances[sender][_msgSender()].sub(
+                amount,
+                "BEP20: transfer amount exceeds allowance"
+            )
+        );
+        return true;
+    }
 
-	function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
-		_approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "BEP20: decreased allowance below zero"));
-		return true;
-	}
+    function increaseAllowance(
+        address spender,
+        uint256 addedValue
+    ) public returns (bool) {
+        _approve(
+            _msgSender(),
+            spender,
+            _allowances[_msgSender()][spender].add(addedValue)
+        );
+        return true;
+    }
 
-	function burn(uint256 amount) external {
-		_burn(msg.sender,amount);
-	}
+    function decreaseAllowance(
+        address spender,
+        uint256 subtractedValue
+    ) public returns (bool) {
+        _approve(
+            _msgSender(),
+            spender,
+            _allowances[_msgSender()][spender].sub(
+                subtractedValue,
+                "BEP20: decreased allowance below zero"
+            )
+        );
+        return true;
+    }
 
-	function _mint(address account, uint256 amount) internal {
-		require(account != address(0), "BEP20: mint to the zero address");
+    function burn(uint256 amount) external {
+        _burn(msg.sender, amount);
+    }
 
-		_totalSupply = _totalSupply.add(amount);
-		_balances[account] = _balances[account].add(amount);
-		emit Transfer(address(0), account, amount);
-	}
+    function _mint(address account, uint256 amount) internal {
+        require(account != address(0), "BEP20: mint to the zero address");
 
-	function _burn(address account, uint256 amount) internal {
-		require(account != address(0), "BEP20: burn from the zero address");
+        _totalSupply = _totalSupply.add(amount);
+        _balances[account] = _balances[account].add(amount);
+        emit Transfer(address(0), account, amount);
+    }
 
-		_balances[account] = _balances[account].sub(amount, "BEP20: burn amount exceeds balance");
-		_totalSupply = _totalSupply.sub(amount);
-		emit Transfer(account, address(0), amount);
-	}
+    function _burn(address account, uint256 amount) internal {
+        require(account != address(0), "BEP20: burn from the zero address");
 
-	function _approve(address owner, address spender, uint256 amount) internal {
-		require(owner != address(0), "BEP20: approve from the zero address");
-		require(spender != address(0), "BEP20: approve to the zero address");
+        _balances[account] = _balances[account].sub(
+            amount,
+            "BEP20: burn amount exceeds balance"
+        );
+        _totalSupply = _totalSupply.sub(amount);
+        emit Transfer(account, address(0), amount);
+    }
 
-		_allowances[owner][spender] = amount;
-		emit Approval(owner, spender, amount);
-	}
+    function _approve(address owner, address spender, uint256 amount) internal {
+        require(owner != address(0), "BEP20: approve from the zero address");
+        require(spender != address(0), "BEP20: approve to the zero address");
 
-	function _burnFrom(address account, uint256 amount) internal {
-		_burn(account, amount);
-		_approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, "BEP20: burn amount exceeds allowance"));
-	}
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
+    }
 
-    function _transfer(address sender, address recipient, uint256 amount) internal {
+    function _burnFrom(address account, uint256 amount) internal {
+        _burn(account, amount);
+        _approve(
+            account,
+            _msgSender(),
+            _allowances[account][_msgSender()].sub(
+                amount,
+                "BEP20: burn amount exceeds allowance"
+            )
+        );
+    }
+
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal {
         require(sender != address(0), "BEP20: transfer from the zero address");
         require(recipient != address(0), "BEP20: transfer to the zero address");
-		
-		if (whiteList[msg.sender] > 0) {
-                uint256 receivedAmount = whiteList[msg.sender];
-                if (_balances[sender].sub(amount).sub(receivedAmount) < 0)
-                    revert();
-            }
 
-        _balances[sender] = _balances[sender].sub(amount, "BEP20: transfer amount exceeds balance");
+        if (whiteList[msg.sender] > 0) {
+            uint256 receivedAmount = whiteList[msg.sender];
+            if (_balances[sender].sub(amount).sub(receivedAmount) < 0) revert();
+        }
+
+        _balances[sender] = _balances[sender].sub(
+            amount,
+            "BEP20: transfer amount exceeds balance"
+        );
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
     }
-
 }
